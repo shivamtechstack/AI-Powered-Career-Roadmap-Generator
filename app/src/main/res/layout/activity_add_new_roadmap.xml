@@ -61,6 +61,8 @@
             <RadioButton
                 android:id="@+id/radioPredefined"
                 android:layout_width="0dp"
+                android:focusedByDefault="true"
+
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Choose from List" />
@@ -185,13 +187,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvTimeLabel" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnCreateRoadmap"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:padding="14dp"
+            app:cornerRadius="12dp"
+            android:textColor="@color/black"
             android:text="Create Roadmap"
+            android:backgroundTint="@color/buttonsColor"
             android:textAllCaps="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
