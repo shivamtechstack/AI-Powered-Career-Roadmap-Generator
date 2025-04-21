@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+        <string-array name="predefined_goals">
+            <item>Android Developer</item>
+            <item>Full Stack Developer</item>
+            <item>Data Scientist</item>
+            <item>UI/UX Designer</item>
+        </string-array>
+
+        <string-array name="experience_levels">
+            <item>Beginner</item>
+            <item>Intermediate</item>
+            <item>Advanced</item>
+        </string-array>
+
+        <string-array name="time_commitment">
+            <item>5 hours/week</item>
+            <item>10 hours/week</item>
+            <item>15 hours/week</item>
+            <item>20+ hours/week</item>
+        </string-array>
+
+</resources>
