@@ -66,5 +66,6 @@ dependencies {
 
     implementation ("com.google.ai.client.generativeai:generativeai:0.9.0")
 
+    implementation ("org.jsoup:jsoup:1.14.3")
 
 }

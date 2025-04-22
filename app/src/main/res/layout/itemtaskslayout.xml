@@ -20,6 +20,21 @@
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:maxLines="1"
+            android:hint="Task number"
+            android:textStyle="bold"
+            android:id="@+id/taskNumberTextView"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/unhighlighted_text"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:maxLines="1"
+            android:layout_marginTop="10dp"
             android:textStyle="bold"
             android:id="@+id/taskTitleTextView"/>
 
@@ -43,7 +58,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="15sp"
+            android:text="Resources : "
+            android:textColor="@color/buttonsColor"
             android:id="@+id/taskResourceTextView"/>
+
+        <LinearLayout
+            android:id="@+id/linkPreviewContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="5dp"/>
 
     </LinearLayout>
 
