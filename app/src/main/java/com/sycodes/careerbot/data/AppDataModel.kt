@@ -27,6 +27,7 @@ data class TaskEntity(
     val roadmapId: Long,
     val title: String,
     val description: String,
+    val isCompleted: Boolean,
     val estimatedHours: Int,
     val resources: List<String>
 )

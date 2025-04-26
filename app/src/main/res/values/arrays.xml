@@ -3,7 +3,7 @@
 
     <string-array name="predefined_goals">
         <item>Android Developer (Kotlin/Jetpack)</item>
-        <item>IOS Developer (Swift)</item>
+        <item>IOS Developer</item>
         <item>Flutter Developer</item>
         <item>React Native Developer</item>
         <item>Java Developer</item>

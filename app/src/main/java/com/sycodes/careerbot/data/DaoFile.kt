@@ -31,6 +31,6 @@ interface TaskDao {
     @Query("DELETE FROM tasks WHERE roadmapId = :roadmapId")
     suspend fun deleteTasksForRoadmap(roadmapId: Int)
 
-//    @Query("UPDATE tasks SET isCompleted = :isCompleted WHERE id = :taskId")
-//    suspend fun updateTaskStatus(taskId: Int, isCompleted: Boolean)
+    @Query("UPDATE tasks SET isCompleted = :isCompleted WHERE id = :taskId")
+    suspend fun updateTaskStatus(taskId: Int, isCompleted: Boolean)
 }

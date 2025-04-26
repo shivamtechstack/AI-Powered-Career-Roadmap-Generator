@@ -5,6 +5,7 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -12,6 +13,7 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.sycodes.careerbot.R
+import com.sycodes.careerbot.data.AppDatabase
 import com.sycodes.careerbot.data.TaskEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -38,6 +40,12 @@ class TaskAdapter(private var tasks: List<TaskEntity>) : RecyclerView.Adapter<Ta
         holder.estimatedTimeTextView.text = "Estimated Time: ${task.estimatedHours}"
         holder.taskNumberTextView.text = "Task ${position + 1}"
 
+        if (task.isCompleted){
+            holder.checkBox.isChecked = true
+        }else{
+            holder.checkBox.isChecked = false
+        }
+
         holder.linkPreviewContainer.removeAllViews()
 
         val urls = task.resources.map { it.trim() }.filter { it.isNotEmpty() }
@@ -54,6 +62,13 @@ class TaskAdapter(private var tasks: List<TaskEntity>) : RecyclerView.Adapter<Ta
             cardView.setOnClickListener {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
                 holder.itemView.context.startActivity(intent)
+            }
+
+            holder.checkBox.setOnClickListener {
+                CoroutineScope(Dispatchers.IO).launch {
+                    AppDatabase.getAppDatabase(holder.itemView.context).taskDao().updateTaskStatus(
+                        task.id.toInt(), !task.isCompleted)
+                }
             }
 
             CoroutineScope(Dispatchers.IO).launch {
@@ -95,8 +110,10 @@ class TaskAdapter(private var tasks: List<TaskEntity>) : RecyclerView.Adapter<Ta
         var summaryTextView = view.findViewById<TextView>(R.id.TaskSummaryTextView)!!
         var estimatedTimeTextView = view.findViewById<TextView>(R.id.taskEstimatedTimeTextView)!!
         var taskNumberTextView = view.findViewById<TextView>(R.id.taskNumberTextView)!!
-
+        var checkBox = view.findViewById<CheckBox>(R.id.taskCheckbox)!!
         val linkPreviewContainer: LinearLayout = view.findViewById(R.id.linkPreviewContainer)
+
+
 
     }
 }

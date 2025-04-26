@@ -5,7 +5,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
-@androidx.room.Database(entities = [RoadmapEntity::class, TaskEntity::class], version = 1)
+@androidx.room.Database(entities = [RoadmapEntity::class, TaskEntity::class], version = 2)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun roadmapDao(): RoadmapDao
@@ -21,7 +21,8 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "app_database"
-                ).build()
+                ).fallbackToDestructiveMigration().build()
+
                 INSTANCE = instance
                 instance
             }
