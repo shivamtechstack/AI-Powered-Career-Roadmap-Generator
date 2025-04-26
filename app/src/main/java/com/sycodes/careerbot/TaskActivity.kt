@@ -1,6 +1,9 @@
 package com.sycodes.careerbot
 
+import android.content.Intent
 import android.os.Bundle
+import android.window.OnBackInvokedDispatcher
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -36,15 +39,29 @@ class TaskActivity : AppCompatActivity() {
         binding.taskRoadmapEstimatedTimeTextView.text = "Time Commitment $roadmapEstimatedTime"
 
 
-            var database = AppDatabase.getAppDatabase(this).taskDao()
+        var database = AppDatabase.getAppDatabase(this).taskDao()
 
-            CoroutineScope(Dispatchers.IO).launch {
-                var taskList = database.getTasksForRoadmap(roadmapId)
-                withContext(Dispatchers.Main){
-                    binding.tasksRecyclerView.layoutManager = LinearLayoutManager(this@TaskActivity)
-                    binding.tasksRecyclerView.adapter = TaskAdapter(taskList)
+        CoroutineScope(Dispatchers.IO).launch {
+            var taskList = database.getTasksForRoadmap(roadmapId)
+            withContext(Dispatchers.Main) {
+                binding.tasksRecyclerView.layoutManager = LinearLayoutManager(this@TaskActivity)
+                binding.tasksRecyclerView.adapter = TaskAdapter(taskList)
 
+            }
+        }
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (isTaskRoot) {
+                    val intent = Intent(this@TaskActivity, MainActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(intent)
+                    finish()
+                } else {
+                    finish()
                 }
             }
+        })
     }
+
 }
