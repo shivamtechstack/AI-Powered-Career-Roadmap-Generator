@@ -2,18 +2,22 @@ package com.sycodes.careerbot
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sycodes.careerbot.data.AppDatabase
 import com.sycodes.careerbot.data.RoadmapAdapter
+import com.sycodes.careerbot.data.RoadmapEntity
 import com.sycodes.careerbot.data.SharedPreferencesHelper
 import com.sycodes.careerbot.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -61,9 +65,41 @@ class MainActivity : AppCompatActivity() {
                     intent.putExtra("roadmapSummary", it.summary)
                     intent.putExtra("roadmapEstimatedTime", it.estimatedTime)
                     startActivity(intent)
-                }, onLongClickListener = {
-                    // Handle long click if needed
+                }, onLongClickListener = { roadmap, view ->
+                    showPopupMenu(view, roadmap)
                 })
+            }
+        }
+    }
+
+    private fun showPopupMenu(anchorView: View, roadmap: RoadmapEntity) {
+        val popupMenu = PopupMenu(this, anchorView)
+        popupMenu.menuInflater.inflate(R.menu.roadmap_popup_menu, popupMenu.menu)
+
+        popupMenu.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.menu_delete -> {
+                    deleteRoadmapAndTasks(roadmap)
+                    true
+                }
+                else -> false
+            }
+        }
+
+        popupMenu.show()
+    }
+
+
+    private fun deleteRoadmapAndTasks(roadmap: RoadmapEntity) {
+        val roadmapDao = AppDatabase.getAppDatabase(this).roadmapDao()
+        val taskDao = AppDatabase.getAppDatabase(this).taskDao()
+
+        CoroutineScope(Dispatchers.IO).launch {
+            taskDao.deleteTasksForRoadmap(roadmap.id.toInt()) // Delete tasks first
+            roadmapDao.deleteRoadmapById(roadmap.id.toInt())   // Then delete roadmap
+            withContext(Dispatchers.Main) {
+                loadRoadmaps() // Reload list after deletion
+                Toast.makeText(this@MainActivity, "Deleted \"${roadmap.title}\"", Toast.LENGTH_SHORT).show()
             }
         }
     }

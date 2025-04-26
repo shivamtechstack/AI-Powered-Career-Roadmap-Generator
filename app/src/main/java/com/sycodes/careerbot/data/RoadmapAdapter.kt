@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sycodes.careerbot.R
 import com.sycodes.careerbot.utility.DateAndTimeFormat
 
-class RoadmapAdapter(private var roadmaps: List<RoadmapEntity>, private var onClickListener: (RoadmapEntity) -> Unit, private var onLongClickListener: (RoadmapEntity) -> Unit) : RecyclerView.Adapter<RoadmapAdapter.RoadmapViewHolder>() {
+class RoadmapAdapter(private var roadmaps: List<RoadmapEntity>,
+                     private var onClickListener: (RoadmapEntity) -> Unit,
+                     private var onLongClickListener: (RoadmapEntity, View) -> Unit) : RecyclerView.Adapter<RoadmapAdapter.RoadmapViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -32,7 +34,7 @@ class RoadmapAdapter(private var roadmaps: List<RoadmapEntity>, private var onCl
         }
 
         holder.itemView.setOnLongClickListener {
-            onLongClickListener(roadmap)
+            onLongClickListener(roadmap, it)
             true
         }
     }
