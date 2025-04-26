@@ -14,6 +14,7 @@ import com.sycodes.careerbot.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
@@ -39,10 +40,17 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, AddNewRoadmapActivity::class.java)
             startActivity(intent)
         }
+        loadRoadmaps()
+    }
 
-        var database = AppDatabase.getAppDatabase(this).roadmapDao()
+    override fun onResume() {
+        super.onResume()
+        loadRoadmaps()
+    }
+    private fun loadRoadmaps() {
+        val database = AppDatabase.getAppDatabase(this).roadmapDao()
 
-        CoroutineScope(Dispatchers.IO).async {
+        CoroutineScope(Dispatchers.IO).launch {
             val roadmaps = database.getAllRoadmaps()
             withContext(Dispatchers.Main) {
                 binding.mainRecyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
@@ -54,10 +62,10 @@ class MainActivity : AppCompatActivity() {
                     intent.putExtra("roadmapEstimatedTime", it.estimatedTime)
                     startActivity(intent)
                 }, onLongClickListener = {
-
+                    // Handle long click if needed
                 })
             }
         }
-
     }
+
 }

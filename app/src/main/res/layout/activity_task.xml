@@ -26,6 +26,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
                 android:maxLines="1"
+                android:textColor="@color/blackAndWhite"
                 android:textStyle="bold"
                 android:id="@+id/task_roadmapTitleTextView"/>
 

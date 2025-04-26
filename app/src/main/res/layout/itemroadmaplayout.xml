@@ -20,6 +20,7 @@
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:maxLines="1"
+            android:textColor="@color/blackAndWhite"
             android:textStyle="bold"
             android:id="@+id/roadmapTitleTextView"/>
 
@@ -28,6 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16sp"
+            android:textColor="@color/blackAndWhite"
             android:maxLines="2"
             android:id="@+id/roadmapSummaryTextView"/>
 
@@ -36,7 +38,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="15sp"
-            android:textColor="@color/unhighlighted_text"
             android:id="@+id/roadmapCreationTimeTextView"/>
 
         <TextView
