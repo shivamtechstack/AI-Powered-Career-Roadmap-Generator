@@ -1,7 +1,9 @@
 package com.sycodes.careerbot.adapter
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +11,7 @@ import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -30,6 +33,7 @@ class TaskAdapter(private var tasks: List<TaskEntity>) : RecyclerView.Adapter<Ta
         return TaskViewHolder(inflate)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(
         holder: TaskViewHolder,
         position: Int
@@ -48,7 +52,8 @@ class TaskAdapter(private var tasks: List<TaskEntity>) : RecyclerView.Adapter<Ta
 
         holder.linkPreviewContainer.removeAllViews()
 
-        val urls = task.resources.map { it.trim() }.filter { it.isNotEmpty() }
+        val urls = task.resources.map { it.trim() }
+            .filter { it.isNotEmpty() && Patterns.WEB_URL.matcher(it).matches() && (it.startsWith("http://") || it.startsWith("https://")) }
 
         for (url in urls) {
             val previewView = LayoutInflater.from(holder.itemView.context)
@@ -60,14 +65,11 @@ class TaskAdapter(private var tasks: List<TaskEntity>) : RecyclerView.Adapter<Ta
             val cardView = previewView.findViewById<CardView>(R.id.linkPreviewCard)
 
             cardView.setOnClickListener {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                holder.itemView.context.startActivity(intent)
-            }
-
-            holder.checkBox.setOnClickListener {
-                CoroutineScope(Dispatchers.IO).launch {
-                    AppDatabase.getAppDatabase(holder.itemView.context).taskDao().updateTaskStatus(
-                        task.id.toInt(), !task.isCompleted)
+                try {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                    it.context.startActivity(intent)
+                } catch (e: Exception) {
+                    Toast.makeText(it.context, "Invalid URL", Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -77,11 +79,11 @@ class TaskAdapter(private var tasks: List<TaskEntity>) : RecyclerView.Adapter<Ta
                     val ogTitle = doc.select("meta[property=og:title]").attr("content")
                     val ogImage = doc.select("meta[property=og:image]").attr("content")
                     val ogUrl = doc.select("meta[property=og:url]").attr("content")
-                    val domain = Uri.parse(ogUrl).host ?: Uri.parse(url).host
+                    val domain = Uri.parse(ogUrl.ifEmpty { url }).host
 
                     withContext(Dispatchers.Main) {
-                        titleView.text = ogTitle
-                        domainView.text = domain
+                        titleView.text = ogTitle.ifEmpty { url }
+                        domainView.text = domain ?: ""
                         Glide.with(holder.itemView.context)
                             .load(ogImage)
                             .placeholder(R.drawable.ic_launcher_background)
@@ -96,6 +98,7 @@ class TaskAdapter(private var tasks: List<TaskEntity>) : RecyclerView.Adapter<Ta
                     }
                 }
             }
+
             holder.linkPreviewContainer.addView(previewView)
         }
 
@@ -112,8 +115,6 @@ class TaskAdapter(private var tasks: List<TaskEntity>) : RecyclerView.Adapter<Ta
         var taskNumberTextView = view.findViewById<TextView>(R.id.taskNumberTextView)!!
         var checkBox = view.findViewById<CheckBox>(R.id.taskCheckbox)!!
         val linkPreviewContainer: LinearLayout = view.findViewById(R.id.linkPreviewContainer)
-
-
 
     }
 }

@@ -89,16 +89,15 @@ class MainActivity : AppCompatActivity() {
         popupMenu.show()
     }
 
-
     private fun deleteRoadmapAndTasks(roadmap: RoadmapEntity) {
         val roadmapDao = AppDatabase.getAppDatabase(this).roadmapDao()
         val taskDao = AppDatabase.getAppDatabase(this).taskDao()
 
         CoroutineScope(Dispatchers.IO).launch {
-            taskDao.deleteTasksForRoadmap(roadmap.id.toInt()) // Delete tasks first
-            roadmapDao.deleteRoadmapById(roadmap.id.toInt())   // Then delete roadmap
+            taskDao.deleteTasksForRoadmap(roadmap.id.toInt())
+            roadmapDao.deleteRoadmapById(roadmap.id.toInt())
             withContext(Dispatchers.Main) {
-                loadRoadmaps() // Reload list after deletion
+                loadRoadmaps()
                 Toast.makeText(this@MainActivity, "Deleted \"${roadmap.title}\"", Toast.LENGTH_SHORT).show()
             }
         }

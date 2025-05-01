@@ -2,7 +2,6 @@ package com.sycodes.careerbot
 
 import android.content.Intent
 import android.os.Bundle
-import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -63,5 +62,4 @@ class TaskActivity : AppCompatActivity() {
             }
         })
     }
-
 }
