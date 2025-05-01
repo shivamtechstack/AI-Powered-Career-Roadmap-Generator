@@ -16,7 +16,6 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.sycodes.careerbot.R
-import com.sycodes.careerbot.data.AppDatabase
 import com.sycodes.careerbot.data.TaskEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -86,14 +85,14 @@ class TaskAdapter(private var tasks: List<TaskEntity>) : RecyclerView.Adapter<Ta
                         domainView.text = domain ?: ""
                         Glide.with(holder.itemView.context)
                             .load(ogImage)
-                            .placeholder(R.drawable.ic_launcher_background)
+                            .placeholder(R.drawable.websiteredirectimagepage)
                             .into(imageView)
                     }
                 } catch (e: Exception) {
                     withContext(Dispatchers.Main) {
                         titleView.text = url
                         domainView.text = ""
-                        imageView.setImageResource(R.drawable.ic_launcher_foreground)
+                        imageView.setImageResource(R.drawable.websiteredirectimagepage)
                         e.printStackTrace()
                     }
                 }
