@@ -16,6 +16,7 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.sycodes.careerbot.R
+import com.sycodes.careerbot.data.AppDatabase
 import com.sycodes.careerbot.data.TaskEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -23,7 +24,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.jsoup.Jsoup
 
-class TaskAdapter(private var tasks: List<TaskEntity>) : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
+class TaskAdapter(private var tasks: List<TaskEntity>,private val onStatusChanged: (completed: Int, total: Int) -> Unit) : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -43,10 +44,23 @@ class TaskAdapter(private var tasks: List<TaskEntity>) : RecyclerView.Adapter<Ta
         holder.estimatedTimeTextView.text = "Estimated Time: ${task.estimatedHours}"
         holder.taskNumberTextView.text = "Task ${position + 1}"
 
-        if (task.isCompleted){
-            holder.checkBox.isChecked = true
-        }else{
-            holder.checkBox.isChecked = false
+        holder.checkBox.setOnCheckedChangeListener(null)
+        holder.checkBox.isChecked = task.isCompleted
+        holder.checkBox.setOnCheckedChangeListener { _, isChecked ->
+            // ② Update Room
+            CoroutineScope(Dispatchers.IO).launch {
+                AppDatabase.getAppDatabase(holder.itemView.context)
+                    .taskDao()
+                    .updateTaskStatus(task.id.toInt(), isChecked)
+            }
+
+            // ③ Update local model & rebind this row
+            task.isCompleted = isChecked
+            notifyItemChanged(position)
+
+            // ④ Callback with new counts
+            val completedCount = tasks.count { it.isCompleted }
+            onStatusChanged(completedCount, tasks.size)
         }
 
         holder.linkPreviewContainer.removeAllViews()

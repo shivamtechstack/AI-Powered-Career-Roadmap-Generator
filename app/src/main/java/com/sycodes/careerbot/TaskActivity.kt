@@ -10,6 +10,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sycodes.careerbot.adapter.TaskAdapter
 import com.sycodes.careerbot.data.AppDatabase
+import com.sycodes.careerbot.data.TaskDao
 import com.sycodes.careerbot.databinding.ActivityTaskBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -41,10 +42,15 @@ class TaskActivity : AppCompatActivity() {
         var database = AppDatabase.getAppDatabase(this).taskDao()
 
         CoroutineScope(Dispatchers.IO).launch {
+            val list = database.getTasksForRoadmap(roadmapId).toMutableList()
+            updateProgress(list.count { it.isCompleted }, list.size)
+
             var taskList = database.getTasksForRoadmap(roadmapId)
             withContext(Dispatchers.Main) {
                 binding.tasksRecyclerView.layoutManager = LinearLayoutManager(this@TaskActivity)
-                binding.tasksRecyclerView.adapter = TaskAdapter(taskList)
+                binding.tasksRecyclerView.adapter = TaskAdapter(taskList, onStatusChanged = { completed, total ->
+                    updateProgress(completed,total)
+                })
 
             }
         }
@@ -62,4 +68,10 @@ class TaskActivity : AppCompatActivity() {
             }
         })
     }
+    private fun updateProgress(completed: Int, total: Int) {
+        val percent = if (total > 0) (completed * 100 / total) else 0
+        binding.taskProgressBar.progress = percent
+        binding.progressTextView.text = "Progress: $percent%"
+    }
+
 }
