@@ -45,30 +45,27 @@ Go to AddNewRoadmapActivity
 
 Replace: 
 const val apiKey = "your_api_key_here"
+
 Build and Run the app on an emulator or Android device (API 29+)
 
-🧰 Tech Stack
-📱 Android – Kotlin + XML
 
-🔗 Retrofit – For API communication
+## **🧰 Tech Stack**
+* 📱 Android – Kotlin + XML
+* 🔗 Retrofit – For API communication
+* 🧠 Gemini Flash 2.0 – Google Generative AI
+* 🗃️ Room DB – Local storage of roadmaps and tasks
+* 🖼️ Link Preview Library – Rich previews of shared links
+* 🧩 MVVM Pattern – Modular and scalable architecture
 
-🧠 Gemini Flash 2.0 – Google Generative AI
-
-🗃️ Room DB – Local storage of roadmaps and tasks
-
-🖼️ Link Preview Library – Rich previews of shared links
-
-🧩 MVVM Pattern – Modular and scalable architecture
-
-🤝 Contributing
+## **🤝 Contributing**
 Pull requests and contributions are welcome.
 Please fork the repository and submit a PR with clear explanation and minimal changes.
 
-📬 Contact
-Developer: Shivam
-📧 Personal: shivam16yadav16@gmail.com
-📧 Dev: devshivamyadav1604@gmail.com
-🔗 GitHub: @shivamtechstack
+## **📬 Contact**
+1. Developer: Shivam
+2. Personal: shivam16yadav16@gmail.com
+3. Dev: devshivamyadav1604@gmail.com
+4. GitHub: @shivamtechstack
 
-📄 License
+## 📄 License
 This project is licensed under the MIT License.
